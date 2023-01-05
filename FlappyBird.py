@@ -76,3 +76,21 @@ def draw_window(window, bird):
     window.blit(BG_IMG, (0, 0))
     bird.draw(window)
     pygame.display.update()
+
+def main():
+    bird = Bird(200, 200)
+    window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    clock = pygame.time.Clock()
+
+    running = True
+    while running:
+        clock.tick(60)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        bird.move()
+        draw_window(window, bird)
+    pygame.quit()
+    quit()
+
+main()
