@@ -89,6 +89,11 @@ class Pipe:
         self.passed = False
         self.set_height()
 
+    def set_height(self):
+        self.height = random.randrange(50, 450)
+        self.top = self.height - self.PIPE_TOP.get_height()
+        self.bottom = self.height + self.GAP
+
 def draw_window(window, bird):
     window.blit(BG_IMG, (0, 0))
     bird.draw(window)
