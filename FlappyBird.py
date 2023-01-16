@@ -7,6 +7,9 @@ pygame.font.init()
 
 WINDOW_WIDTH = 500
 WINDOW_HEIGHT = 800
+
+GEN = 0
+
 BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs","bird" + str(x) + ".png"))) for x in range(3)]
 PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
 BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "base.png")))
@@ -143,12 +146,16 @@ class Base:
         window.blit(self.IMG, (self.x1, self.y))
         window.blit(self.IMG, (self.x2, self.y))
 
-def draw_window(window, birds, pipes, base, score):
+def draw_window(window, birds, pipes, base, score, gen):
     window.blit(BG_IMG, (0, 0))
     for pipe in pipes:
         pipe.draw(window)
     text = STAT_FONT.render("Score: " + str(score), 1, (255, 255, 255))
     window.blit(text, (WINDOW_WIDTH - 10 - text.get_width(), 10))
+
+    text = STAT_FONT.render("Gen: " + str(gen), 1, (255, 255, 255))
+    window.blit(text, (10, 10))
+
     base.draw(window)
     for bird in birds:
         bird.draw(window)
@@ -156,6 +163,8 @@ def draw_window(window, birds, pipes, base, score):
     pygame.display.update()
 
 def main(genomes, config):
+    global GEN 
+    GEN += 1
     nets = []
     ge = []
     birds = []
@@ -175,7 +184,7 @@ def main(genomes, config):
 
     running = True
     while running:
-        clock.tick(30)
+        clock.tick(120)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -231,7 +240,7 @@ def main(genomes, config):
                 ge.pop(x)
         
         base.move()
-        draw_window(window, birds, pipes, base, score)
+        draw_window(window, birds, pipes, base, score, GEN)
 
 def run(config_path):
     config = neat.config.Config(neat.DefaultGenome, neat.DefaultReproduction, neat.DefaultSpeciesSet, neat.DefaultStagnation, config_path)
